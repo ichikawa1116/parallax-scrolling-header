@@ -12,6 +12,11 @@
 		38EC82EE22369497007306F7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38EC82EC22369497007306F7 /* Main.storyboard */; };
 		38EC82F022369499007306F7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 38EC82EF22369499007306F7 /* Assets.xcassets */; };
 		38EC82F322369499007306F7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 38EC82F122369499007306F7 /* LaunchScreen.storyboard */; };
+		38EC82FB22369798007306F7 /* SamplePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EC82FA22369798007306F7 /* SamplePageViewController.swift */; };
+		38EC82FD223699E4007306F7 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EC82FC223699E4007306F7 /* FirstViewController.swift */; };
+		38EC82FF223699F2007306F7 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EC82FE223699F2007306F7 /* SecondViewController.swift */; };
+		38EC8301223699FC007306F7 /* ThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EC8300223699FC007306F7 /* ThirdViewController.swift */; };
+		38EC83032236AFF6007306F7 /* Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EC83022236AFF6007306F7 /* Builder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +27,11 @@
 		38EC82EF22369499007306F7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		38EC82F222369499007306F7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		38EC82F422369499007306F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		38EC82FA22369798007306F7 /* SamplePageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplePageViewController.swift; sourceTree = "<group>"; };
+		38EC82FC223699E4007306F7 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
+		38EC82FE223699F2007306F7 /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
+		38EC8300223699FC007306F7 /* ThirdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdViewController.swift; sourceTree = "<group>"; };
+		38EC83022236AFF6007306F7 /* Builder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Builder.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,9 +67,14 @@
 				38EC82E822369497007306F7 /* AppDelegate.swift */,
 				38EC82EA22369497007306F7 /* ViewController.swift */,
 				38EC82EC22369497007306F7 /* Main.storyboard */,
+				38EC82FA22369798007306F7 /* SamplePageViewController.swift */,
 				38EC82EF22369499007306F7 /* Assets.xcassets */,
 				38EC82F122369499007306F7 /* LaunchScreen.storyboard */,
 				38EC82F422369499007306F7 /* Info.plist */,
+				38EC82FC223699E4007306F7 /* FirstViewController.swift */,
+				38EC82FE223699F2007306F7 /* SecondViewController.swift */,
+				38EC8300223699FC007306F7 /* ThirdViewController.swift */,
+				38EC83022236AFF6007306F7 /* Builder.swift */,
 			);
 			path = "parallax-scrolling-header";
 			sourceTree = "<group>";
@@ -137,6 +152,11 @@
 			files = (
 				38EC82EB22369497007306F7 /* ViewController.swift in Sources */,
 				38EC82E922369497007306F7 /* AppDelegate.swift in Sources */,
+				38EC83032236AFF6007306F7 /* Builder.swift in Sources */,
+				38EC82FB22369798007306F7 /* SamplePageViewController.swift in Sources */,
+				38EC82FF223699F2007306F7 /* SecondViewController.swift in Sources */,
+				38EC8301223699FC007306F7 /* ThirdViewController.swift in Sources */,
+				38EC82FD223699E4007306F7 /* FirstViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
