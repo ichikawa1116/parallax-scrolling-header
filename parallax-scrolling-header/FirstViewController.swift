@@ -28,6 +28,10 @@ class FirstViewController: UIViewController {
 
 
     }
+    
+    func setScrollPosition(_ position: CGFloat) {
+        tableView.contentOffset = CGPoint(x: tableView.contentOffset.x, y: position)
+    }
 }
 
 extension FirstViewController: UITableViewDataSource {

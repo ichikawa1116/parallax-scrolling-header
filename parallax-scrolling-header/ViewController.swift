@@ -14,9 +14,8 @@ class ViewController: UIViewController {
     @IBOutlet weak private var menuView: UIView!
     @IBOutlet weak private var headerHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var scrollView: UIScrollView!
-    // スクロールできる範囲 maxHeaderHeight + maxMenuHeight
-    private var maxHeaderHeight: CGFloat! // 動的
-    private let minHeaderHeight: CGFloat = 0
+    private var maxHeaderY: CGFloat! // 動的
+    private let minHeaderY: CGFloat = 0
     private let maxMenuHeight: CGFloat = 70
     private let minMenuHeight: CGFloat = 35
     private let previousScrollOffset: CGFloat = 0
@@ -42,8 +41,53 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        maxHeaderHeight = headerView.frame.height // ここでセットしていいか要検討
+        maxHeaderY = headerView.frame.height // ここでセットしていいか要検討
         pageViewController.firstViewController.delegate = self
+    }
+    
+    // タブの途中でスクロールが止まった時は出すか閉じるかどちらかにする
+    func scrollViewDidStopScrolling() {
+        // TODO: 計算がおかしい
+//        let range = maxMenuHeight - minMenuHeight
+//        let midPoint = minMenuHeight + (range / 2)
+//
+//        if self.headerHeightConstraint.constant > midPoint + maxHeaderY {
+//            self.expandHeader()
+//        } else {
+//            self.collapseHeader()
+//        }
+    }
+    
+    func collapseHeader() {
+        self.view.layoutIfNeeded()
+        UIView.animate(withDuration: 0.2, animations: {
+            self.headerHeightConstraint.constant = self.minMenuHeight
+            self.updateHeader()
+            self.view.layoutIfNeeded()
+        })
+    }
+    
+    func expandHeader() {
+        self.view.layoutIfNeeded()
+        UIView.animate(withDuration: 0.2, animations: {
+            self.headerHeightConstraint.constant = self.maxMenuHeight
+            self.updateHeader()
+            self.view.layoutIfNeeded()
+        })
+    }
+    
+    func updateHeader() {
+        // タブのUIを変更する場合はここで
+        let range = self.maxMenuHeight - self.minMenuHeight
+        let openAmount = self.headerHeightConstraint.constant - self.minMenuHeight
+        let percentage = openAmount / range
+        
+    }
+}
+
+extension ViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -55,56 +99,7 @@ class ViewController: UIViewController {
             self.scrollViewDidStopScrolling()
         }
     }
-    
-    func scrollViewDidStopScrolling() {
-        let range = self.maxHeaderHeight - self.minHeaderHeight
-        let midPoint = self.minHeaderHeight + (range / 2)
-        
-        if self.headerHeightConstraint.constant > midPoint {
-            self.expandHeader()
-        } else {
-            self.collapseHeader()
-        }
-    }
-    
-    func collapseHeader() {
-        self.view.layoutIfNeeded()
-        UIView.animate(withDuration: 0.2, animations: {
-            self.headerHeightConstraint.constant = self.minHeaderHeight
-            self.updateHeader()
-            self.view.layoutIfNeeded()
-        })
-    }
-    
-    func expandHeader() {
-        self.view.layoutIfNeeded()
-        UIView.animate(withDuration: 0.2, animations: {
-            self.headerHeightConstraint.constant = self.maxHeaderHeight
-            self.updateHeader()
-            self.view.layoutIfNeeded()
-        })
-    }
-    
-    func setScrollPosition(_ position: CGFloat) {
-//        self.tableView.contentOffset = CGPoint(x: self.tableView.contentOffset.x, y: position)
-        
-        // 子ビューに対して
-    }
-    
-    func updateHeader() {
-        let range = self.maxHeaderHeight - self.minHeaderHeight
-        let openAmount = self.headerHeightConstraint.constant - self.minHeaderHeight
-        let percentage = openAmount / range
-        
-//        self.titleTopConstraint.constant = -openAmount + 10
-//        self.logoImageView.alpha = percentage
-    }
-}
 
-extension ViewController: UIScrollViewDelegate {
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    }
 }
 
 extension ViewController: FirstViewProtocol {
@@ -118,25 +113,36 @@ extension ViewController: FirstViewProtocol {
         let isScrollingDown = scrollDiff > 0 && offsetY > absoluteTop
         let isScrollingUp = scrollDiff < 0 && offsetY < absoluteBottom
         
-        var newHeight = self.headerHeightConstraint.constant
+        var newTabHeight = self.headerHeightConstraint.constant
+        var newHaderY = CGFloat()
         if isScrollingDown {
-            newHeight = max(self.minHeaderHeight, self.headerHeightConstraint.constant - abs(scrollDiff))
+            newHaderY = max(self.minHeaderY, offsetY - abs(scrollDiff))
+            // 上のヘッダーが最小値の時(スクロールで画面から消えた時)に下のヘッダーが動き出す
+            if newHaderY == minHeaderY {
+                newTabHeight = max(self.minMenuHeight, self.headerHeightConstraint.constant - abs(scrollDiff))
+            }
+            
+            if offsetY <= maxHeaderY {
+                scrollView.contentOffset.y = offsetY
+            }
         } else if isScrollingUp {
-            newHeight = min(self.maxHeaderHeight, self.headerHeightConstraint.constant + abs(scrollDiff))
+            
+            // ヘッダーセクションが高さ最大の間、ヘッダーが動き出す
+            newTabHeight = min(maxMenuHeight, self.headerHeightConstraint.constant + abs(scrollDiff))
+            if newTabHeight == maxMenuHeight {
+                newHaderY = min(self.maxHeaderY, offsetY + abs(scrollDiff))
+            }
+            newTabHeight = min(maxMenuHeight, self.headerHeightConstraint.constant + abs(scrollDiff))
         }
         
-        // Header needs to animate
-        if newHeight != self.headerHeightConstraint.constant {
-            self.headerHeightConstraint.constant = newHeight
-            self.updateHeader()
-            self.setScrollPosition(self.previousScrollOffset)
+        if newTabHeight != self.headerHeightConstraint.constant {
+            // タブの高さが変更される
+            headerHeightConstraint.constant = newTabHeight
+            updateHeader()
+            /* 子の動きを止める
+            (高さが変更されている最中にTableViewもスクロールもすると、2倍速で動いているように見える) */
+            pageViewController.firstViewController.setScrollPosition(previousScrollOffset)
         }
-        
-        if offsetY <= maxHeaderHeight {
-            scrollView.contentOffset.y = offsetY
-            print(offsetY)
-        }
-        //pageViewController.firstViewController.tableView.contentOffset.y = 0
     }
 }
 
